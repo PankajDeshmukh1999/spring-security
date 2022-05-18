@@ -5,8 +5,11 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
+import com.customer.VO.ResponseTemplateVO;
 import com.customer.entity.Customer;
+import com.customer.entity.Product;
 import com.customer.repository.CustomerRepository;
 
 @Service
@@ -14,6 +17,9 @@ public class CustomerService {
 
 	@Autowired
 	private CustomerRepository repository;
+	
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	public void saveData(Customer customer) {
 		repository.save(customer);
@@ -41,5 +47,15 @@ public class CustomerService {
 
 	public void deleteAllData() {
 		repository.deleteAll();
+	}
+
+	public ResponseTemplateVO getCustomerWithProduct(int cId) {
+		ResponseTemplateVO vo = new ResponseTemplateVO();
+		Customer customer  = repository.getById(cId);
+		Product product = restTemplate.getForObject("http://localhost:8001/product/"+ customer.getcId(),
+				Product.class);
+		vo.setCustomer(customer);
+		vo.setProduct(product);
+		return vo;
 	}
 }

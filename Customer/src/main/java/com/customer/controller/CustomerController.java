@@ -3,6 +3,7 @@ package com.customer.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,17 +15,23 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
 
+import com.customer.VO.ResponseTemplateVO;
 import com.customer.entity.Customer;
+import com.customer.entity.Product;
+import com.customer.repository.CustomerRepository;
 import com.customer.service.CustomerService;
 
 @RestController
-
+@RequestMapping("/customer")
 public class CustomerController {
 
 	@Autowired
 	private CustomerService service;
 
+	@Autowired
+	private RestTemplate restTemplate;
 	
 //	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/saveData")
@@ -74,6 +81,25 @@ public class CustomerController {
 	public ResponseEntity<String> deleteAllData() {
 		service.deleteAllData();
 		return ResponseEntity.ok("empty");
+	}
+	
+	
+//  call another service
+	
+//	@RequestMapping("/{cId}")
+//	public Customer getCustomProduct(@PathVariable("cId") int cId) {
+//		Customer customer = new Customer();
+//		
+//		List products = this.restTemplate.getForObject("http://product-service/product/1" , List.class);
+//		
+//		customer.setProduct(products);
+//		return customer;
+//	}
+	
+	
+	@RequestMapping("/{cId}")
+	public ResponseTemplateVO getCustomerWithProduct(@PathVariable("cId") int cId) {
+		return service.getCustomerWithProduct(cId);
 	}
 
 }

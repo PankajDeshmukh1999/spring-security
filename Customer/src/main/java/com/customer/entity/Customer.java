@@ -1,5 +1,8 @@
 package com.customer.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +16,8 @@ public class Customer {
 	private int cId;
 	private String name;
 	private String contact;
+	
+	
 	public int getcId() {
 		return cId;
 	}
@@ -41,4 +46,7 @@ public class Customer {
 	public Customer() {
 		
 	}
+		
+	
+	
 }
